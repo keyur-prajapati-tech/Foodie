@@ -1,0 +1,51 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register Page</title>
+</head>
+<body>
+    <div class="container mt-15">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header" style="background-color:tomato;display:flex;justify-content:space-between">
+                        <h3 style="color:#fff">ADD NEW CUSTOMER</h3>
+                        <div style="font-size:15px;font-weight:800">❌</div>
+                    </div>
+                    <div class="card-body">
+                        <form action="/" method="post">
+                            <div class="mb-3">
+                                <input type="text" name="full_name" class="form-control" placeholder="Full Name" />
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" name="email" class="form-control" placeholder="Email" />
+                            </div>
+                            <div class="mb-3 d-flex justify-content-between">
+                                <input type="checkbox" />
+                                <p>I agree to Zomato's Terms of Service, Privacy Policy and Content Policies</p>
+                            </div>
+                            <div class="card-body">
+                                <button class="btn w-100 text-white" style="background-color:darkgray">Create An Account</button>
+                            </div>
+                            <p class="text-center" style="font-weight:800">OR</p>
+                            <div class="card-body" style="display:flex;justify-content:space-between">
+                                <div>
+                                    Sign In As kevinprajapati123@gmail.com
+                                    keyurprajapati123@gmail.com
+                                </div>
+                                <div>
+                                    Google Logo
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                        <p style="font-size:15px;font-weight:800;">don't have an account To Foodie ? <a asp-area="" asp-controller="Login" asp-action="Index" style="color:blue">Login Here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
