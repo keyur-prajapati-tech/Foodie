@@ -15,4 +15,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\For_Customer\" />
+    <Folder Include="Repositories\For_Restaurant\" />
+  </ItemGroup>
+
 </Project>

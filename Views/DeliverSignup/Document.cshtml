@@ -81,7 +81,7 @@
             <h3>📑 Upload Necessary Documents</h3>
         </div>
         <div class="card-body">
-            <form asp-action="UploadDocuments" asp-controller="DeliverSignup" method="post" enctype="multipart/form-data">
+            <form asp-action="Document" asp-controller="DeliverSignup" method="post" enctype="multipart/form-data">
 
                 <label for="ProfilePhoto" class="form-label">Upload Profile Photo</label>
                 <input type="file" class="form-control" id="ProfilePhoto" name="ProfilePhoto" accept="image/*" required>

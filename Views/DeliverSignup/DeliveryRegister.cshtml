@@ -160,3 +160,39 @@
         </div>
     </div>
 </div>
+
+<script>
+    const apiUrl = 'https://localhost:7289/DeliveryAPIController'; // Adjust API URL if needed
+
+    // Handle form submission
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const partner = {
+            FullName: document.getElementById("FullName").value,
+            ContactNumber: document.getElementById("ContactNumber").value,
+            Email: document.getElementById("Email").value,
+            Password: document.getElementById("Password").value
+        };
+
+        fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(partner)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.text().then(text => { throw new Error(text); });
+            }
+        })
+        .then(data => {
+            alert("Delivery partner registered successfully!");
+            document.getElementById("registerForm").reset();
+        })
+        .catch(error => console.error("Error adding delivery partner:", error));
+    });
+</script>

@@ -131,39 +131,5 @@
     </div>
 </div>
 
-<script>
-    async function validateLogin() {
-        const email = document.getElementById('Email').value;
-        const password = document.getElementById('Password').value;
-        const errorMessage = document.getElementById('error-message');
 
-        if (!email || !password) {
-            errorMessage.innerText = "⚠️ Please fill out all fields!";
-            return;
-        }
-
-        try {
-            // Check if the email exists
-            const emailResponse = await fetch(`/api/PartnerAPI/CheckEmail?email=${encodeURIComponent(email)}`);
-            const emailResult = await emailResponse.json();
-
-            if (!emailResult.isRegistered) {
-                errorMessage.innerText = "❌ Email not found. Please register first!";
-                return;
-            }
-
-            // Check if the email and password are correct
-            const loginResponse = await fetch(`/api/PartnerAPI/CheckCredentials?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-            const loginResult = await loginResponse.json();
-
-            if (loginResult.isValidUser) {
-                document.getElementById('loginForm').submit();
-            } else {
-                errorMessage.innerText = "❌ Invalid password. Please try again!";
-            }
-        } catch (error) {
-            errorMessage.innerText = "⚠️ Something went wrong. Try again!";
-        }
-    }
-</script>
 
