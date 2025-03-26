@@ -1,3 +1,6 @@
+
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace Foodie
 {
     public class Program
@@ -9,6 +12,15 @@ namespace Foodie
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
+
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/DeliverSignup/DeliveryLogin"; 
+                    options.AccessDeniedPath = "/Home/AccessDenied";   
+                });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,6 +41,7 @@ namespace Foodie
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
             app.MapControllers();
 
