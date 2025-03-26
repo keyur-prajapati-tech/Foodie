@@ -5,6 +5,7 @@ using System.Numerics;
 
 namespace Foodie.Models
 {
+    // heelo world
     [Table("tbl_deliveryPartners", Schema = "deliverypartner")]
     public class tbl_deliveryPartners
     {
