@@ -1,11 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Personal Details";
-    Layout = ViewBag.Layout ?? "_DeliveryPartnerLayout";
+    Layout = ViewBag.Layout ?? "_DeliverRegisterLayout";
 }
 
 <style>
     body {
-        background-color: white;
+        background: linear-gradient(135deg, #e3f2fd, #e1bee7);
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -19,25 +19,27 @@
         align-items: center;
         justify-content: center;
         min-height: 100vh;
-        padding: 50px;
+        padding: 20px;
     }
 
     .card {
         background-color: #e3e7ff;
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 25px;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-        max-width: 450px;
-        width: 100%;
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        top: 80px;
+        left: -160px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 30px;
+        box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        width: 1000px;
         animation: fadeInEffect 0.8s ease-in-out;
     }
 
     .card-header h3 {
         font-weight: bold;
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-        color: white;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        color: #333;
     }
 
     @@keyframes fadeInEffect {
@@ -53,12 +55,14 @@
     }
 
     .form-control {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
     }
 
     .btn-primary {
         background-color: #007bff;
         transition: all 0.3s ease-in-out;
+        border-radius: 8px;
     }
 
         .btn-primary:hover {
@@ -66,9 +70,14 @@
             transform: scale(1.05);
         }
 
-    .btn-success:hover {
-        transform: scale(1.05);
+    .btn-success {
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
     }
+
+        .btn-success:hover {
+            transform: scale(1.05);
+        }
 
     .card-footer {
         background: rgba(255, 255, 255, 0.1);
@@ -81,14 +90,21 @@
         }
 
     .mb-3 label {
-        color: black;
+        color: #333;
         font-weight: bold;
     }
 
-    
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .card {
+            max-width: 90%;
+        }
+    }
+
     .error {
         border: 2px solid red !important;
     }
+
 </style>
 
 <div class="container mt-5">
@@ -142,7 +158,7 @@
         let isValid = true;
         let requiredFields = document.querySelectorAll(".required");
 
-       
+
         requiredFields.forEach(field => {
             field.classList.remove("error");
         });
@@ -155,7 +171,7 @@
         });
 
         if (isValid) {
-            
+
             window.location.href = "@Url.Action("VehicleDetails", "DeliverSignup")";
         } else {
             alert("⚠ Please fill out all required fields before continuing.");

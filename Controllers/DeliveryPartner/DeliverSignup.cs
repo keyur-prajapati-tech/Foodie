@@ -7,8 +7,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Foodie.Models;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Foodie.Controllers.DeliveryPartner
 {
@@ -28,7 +26,6 @@ namespace Foodie.Controllers.DeliveryPartner
         }
 
         // 🎯 Delivery Partner Index Page
-
         [Route("d/index")]
         public IActionResult DeliveryIndex()
         {
@@ -36,11 +33,10 @@ namespace Foodie.Controllers.DeliveryPartner
         }
 
         // 🎯 Delivery Partner Registration
-
         [Route("d/register")]
         public IActionResult DeliveryRegister()
         {
-            ViewData["Layout"] = "_DeliveryPartnerLayout";
+            ViewData["Layout"] = "_DeliverRegisterLayout";
             return View("DeliveryRegister");
         }
 
@@ -56,8 +52,6 @@ namespace Foodie.Controllers.DeliveryPartner
                     {
                         conn.Open();
                         SqlCommand cmd = new SqlCommand("sp_RegisterDeliveryPartner", conn);
-
-
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("@FullName", partner.FullName);
@@ -65,7 +59,6 @@ namespace Foodie.Controllers.DeliveryPartner
                         cmd.Parameters.AddWithValue("@Email", partner.Email);
                         cmd.Parameters.AddWithValue("@Password", partner.Password);
                         cmd.Parameters.AddWithValue("@CreatedAT", DateTime.Now);
-                       
 
                         int rowsAffected = cmd.ExecuteNonQuery();
 
@@ -78,7 +71,6 @@ namespace Foodie.Controllers.DeliveryPartner
                             ViewBag.Error = "Registration failed. Please try again.";
                             return View("DeliveryRegister");
                         }
-
                     }
                 }
                 catch (SqlException ex)
@@ -86,16 +78,13 @@ namespace Foodie.Controllers.DeliveryPartner
                     ViewBag.Error = $"Database error: {ex.Message}";
                     return View("DeliveryRegister");
                 }
-
             }
 
-            ViewBag.Error = "Registration failed. Please try again.";
+            ViewBag.Error = "Registration failed. Please check your inputs.";
             return View("DeliveryRegister");
         }
 
-
         // 🎯 Delivery Partner Login
-
         [Route("d/login")]
         public IActionResult DeliveryLogin()
         {
@@ -118,7 +107,7 @@ namespace Foodie.Controllers.DeliveryPartner
                 UpdateLastLogin(user.Partner_Id);
 
                 // Redirect to appropriate page after login
-                return RedirectToAction("PendingApproval");
+                return HandleLoginRedirect(user.Status);
             }
             else
             {
@@ -179,11 +168,11 @@ namespace Foodie.Controllers.DeliveryPartner
         private async Task SignInUser(tbl_deliveryPartners partner)
         {
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, partner.Email),
-        new Claim("PartnerId", partner.Partner_Id.ToString()),
-        new Claim(ClaimTypes.Role, "DeliveryPartner")
-    };
+            {
+                new Claim(ClaimTypes.Name, partner.Email),
+                new Claim("PartnerId", partner.Partner_Id.ToString()),
+                new Claim(ClaimTypes.Role, "DeliveryPartner")
+            };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
@@ -194,13 +183,13 @@ namespace Foodie.Controllers.DeliveryPartner
         // Redirect based on partner status
         private IActionResult HandleLoginRedirect(string status)
         {
-            if (status == "Pending")
+            if (status == "Active")
             {
-                return RedirectToAction("PendingApproval");
+                return RedirectToAction("Per_Details");
             }
             else if (status == "Approved")
             {
-                return RedirectToAction("Per_Details");
+                return RedirectToAction("Dashboard");
             }
             else
             {
@@ -209,9 +198,29 @@ namespace Foodie.Controllers.DeliveryPartner
             }
         }
 
+        [HttpGet]
+        [Route("d/checkemail")]
+        public JsonResult CheckIfRegistered(string email)
+        {
+            bool isRegistered = false;
+
+            using (SqlConnection conn = new SqlConnection(GetConnectionString()))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_Check_DeliveryPartner_Email", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    var result = cmd.ExecuteScalar();
+                    isRegistered = result != null;
+                }
+            }
+
+            return Json(new { isRegistered });
+        }
 
         //  Pending Approval Page
-
         [Route("d/pending")]
         public IActionResult PendingApproval()
         {
@@ -219,7 +228,6 @@ namespace Foodie.Controllers.DeliveryPartner
         }
 
         //  Additional Details Page
-
         [Route("d/details")]
         public IActionResult Per_Details()
         {
@@ -227,7 +235,6 @@ namespace Foodie.Controllers.DeliveryPartner
         }
 
         //  Additional CRUD Pages
-
         [Route("d/vehicle")]
         public IActionResult VehicleDetails()
         {
@@ -246,14 +253,12 @@ namespace Foodie.Controllers.DeliveryPartner
             return View();
         }
 
-
-        //this method will be in admin side
+        // This method will be in the admin side
         [Route("d/slots")]
         public IActionResult TimeSlot()
         {
             return View();
         }
-
 
         [Route("d/support")]
         public IActionResult Support()
@@ -266,8 +271,5 @@ namespace Foodie.Controllers.DeliveryPartner
         {
             return View();
         }
-
-
-
     }
 }
